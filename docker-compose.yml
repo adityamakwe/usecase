@@ -4,7 +4,7 @@ services:
 
   db:
     image: mysql:8.0
-    container_name: mysql_db
+    container_name: mysql_db_2
     restart: always
     environment:
       MYSQL_DATABASE: usecase_doctor
@@ -16,7 +16,7 @@ services:
 
   backend:
     build: ./sop_django
-    container_name: django_backend
+    container_name: django_backend_2
     restart: always
     depends_on:
       - db
@@ -31,7 +31,7 @@ services:
 
   frontend:
     build: ./sop-django-ui
-    container_name: angular_frontend
+    container_name: angular_frontend_2
     restart: always
     depends_on:
       - backend
