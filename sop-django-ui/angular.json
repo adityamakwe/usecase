@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "sop-django-doctor-ui": {
+    "sop-django-ui": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/sop-django-doctor-ui",
+            "outputPath": "dist/sop-django-ui",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -60,10 +60,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "sop-django-doctor-ui:build:production"
+              "browserTarget": "sop-django-ui:build:production"
             },
             "development": {
-              "browserTarget": "sop-django-doctor-ui:build:development"
+              "browserTarget": "sop-django-ui:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -71,7 +71,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "sop-django-doctor-ui:build"
+            "browserTarget": "sop-django-ui:build"
           }
         },
         "test": {
