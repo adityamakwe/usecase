@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% include "Header.html" %}
+    <form method="POST">
+        {% csrf_token %}
+        <div align="center">
+            <h1>Add Faculty</h1>
+            {% if form.error %}
+                <h3><font color="red">{{ form.message }}</font></h3>
+            {% else %}
+                <h3><font color="green">{{ form.message }}</font></h3>
+            {% endif %}
+
+            <table>
+                <input type="hidden" name="id" value="{{ form.id }}">
+                <tr>
+                    <th>First Name:</th>
+                    <td><input type="text" name="firstName" value="{{ form.firstName }}"></td>
+                    <td style="position: fixed; color: red;">{{ form.inputError.firstName }}</td>
+                </tr>
+                <tr>
+                    <th>Last Name:</th>
+                    <td><input type="text" name="lastName" value="{{ form.lastName }}"></td>
+                    <td style="position: fixed; color: red;">{{ form.inputError.lastName }}</td>
+                </tr>
+                <tr>
+                    <th>Email:</th>
+                    <td><input type="text" name="email" value="{{ form.email }}"></td>
+                    <td style="position: fixed; color: red;">{{ form.inputError.email }}</td>
+                </tr>
+                <tr>
+                    <th>Password:</th>
+                    <td><input type="text" name="password" value="{{ form.password }}"></td>
+                    <td style="position: fixed; color: red;">{{ form.inputError.password }}</td>
+                </tr>
+                <tr>
+                    <th>Address:</th>
+                    <td><input type="text" name="address" value="{{ form.address }}"></td>
+                    <td style="position: fixed; color: red;">{{ form.inputError.address }}</td>
+                </tr>
+                <tr>
+                    <th>Gender:</th>
+                    <td>
+                        <select name="gender" style="width:100%">
+                            <option value="{{ form.gender }}">{{ form.gender }}</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </td>
+                    <td style="position: fixed; color: red;">{{ form.inputError.gender }}</td>
+                </tr>
+                <tr>
+                    <th>DOB:</th>
+                    <td><input type="date" name="dob" value="{{ form.dob }}" style="width: 98%;"></td>
+                    <td style="position: fixed; color: red;">{{ form.inputError.dob }}</td>
+                </tr>
+                <tr>
+                    <th>College:</th>
+                    <td>
+                        <select name="collegeId" style="width:100%">
+                            <option value="{{ form.collegeId }}">{{ form.collegeName }}</option>
+                            {% for college in collegeList %}
+                                <option value="{{ college.id }}">{{ college.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td style="position: fixed; color: red;">{{ form.inputError.collegeId }}</td>
+                </tr>
+                <tr>
+                    <th>Course:</th>
+                    <td>
+                        <select name="courseId" style="width:100%">
+                            <option value="{{ form.courseId }}">{{ form.courseName }}</option>
+                            {% for course in courseList %}
+                                <option value="{{ course.id }}">{{ course.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td style="position: fixed; color: red;">{{ form.inputError.courseId }}</td>
+                </tr>
+                <tr>
+                    <th>Subject:</th>
+                    <td>
+                        <select name="subjectId" style="width:100%">
+                            <option value="{{ form.subjectId }}">{{ form.subjectName }}</option>
+                            {% for subject in subjectList %}
+                                <option value="{{ subject.id }}">{{ subject.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td style="position: fixed; color: red;">{{ form.inputError.subjectId }}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td><input type="submit" value="save"></td>
+                </tr>
+            </table>
+        </div>
+    </form>
+</body>
+{%include "Footer.html"%}
+</html>

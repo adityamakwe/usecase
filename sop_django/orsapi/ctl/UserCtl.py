@@ -1,21 +1,26 @@
 import json
 from django.http import JsonResponse
 from .BaseCtl import BaseCtl
-from ..models import Doctor
+from ..models import User
 from ..service.RoleService import RoleService
-from ..service.DoctorService import DoctorService
+from ..service.UserService import UserService
 from ..utility.DataValidator import DataValidator
 
 
-class DoctorCtl(BaseCtl):
+class UserCtl(BaseCtl):
 
     def request_to_form(self, requestForm):
-        self.form["id"] = requestForm.get("id", '')
-        self.form["firstName"] = requestForm.get("firstName", '')
-        self.form["lastName"] = requestForm.get("lastName", '')
-        self.form["dob"] = requestForm.get("dob", '')
-        self.form["mobileNumber"] = requestForm.get("mobileNumber", '')
-        self.form["roleId"] = requestForm.get("roleId", '')
+        self.form["id"] = requestForm.get("id",'')
+        self.form["firstName"] = requestForm.get("firstName",'')
+        self.form["lastName"] = requestForm.get("lastName",'')
+        self.form["loginId"] = requestForm.get("loginId",'')
+        self.form["password"] = requestForm.get("password",'')
+        self.form["confirmPassword"] = requestForm.get("confirmPassword",'')
+        self.form["dob"] = requestForm.get("dob",'')
+        self.form["address"] = requestForm.get("address",'')
+        self.form["gender"] = requestForm.get("gender",'')
+        self.form["mobileNumber"] = requestForm.get("mobileNumber",'')
+        self.form["roleId"] = requestForm.get("roleId",'')
         if self.form['roleId'] != '':
             role = RoleService().get(self.form['roleId'])
             self.form["roleName"] = role.name
@@ -27,7 +32,12 @@ class DoctorCtl(BaseCtl):
             obj.id = pk
         obj.firstName = self.form["firstName"]
         obj.lastName = self.form["lastName"]
+        obj.loginId = self.form["loginId"]
+        obj.password = self.form["password"]
+        obj.confirmPassword = self.form["confirmPassword"]
         obj.dob = self.form["dob"]
+        obj.address = self.form["address"]
+        obj.gender = self.form["gender"]
         obj.mobileNumber = self.form["mobileNumber"]
         obj.roleId = self.form["roleId"]
         obj.roleName = role.name
@@ -39,7 +49,12 @@ class DoctorCtl(BaseCtl):
         self.form["id"] = obj.id
         self.form["firstName"] = obj.firstName
         self.form["lastName"] = obj.lastName
+        self.form["loginId"] = obj.loginId
+        self.form["password"] = obj.password
+        self.form["confirmPassword"] = obj.confirmPassword
         self.form["dob"] = obj.dob.strftime("%Y-%m-%d")
+        self.form["address"] = obj.address
+        self.form["gender"] = obj.gender
         self.form["mobileNumber"] = obj.mobileNumber
         self.form["roleId"] = obj.roleId
         self.form["roleName"] = obj.roleName
@@ -56,6 +71,27 @@ class DoctorCtl(BaseCtl):
             inputError["lastName"] = "Last Name is required"
             self.form["error"] = True
 
+        if (DataValidator.isNull(self.form["loginId"])):
+            inputError["loginId"] = "Login ID is required"
+            self.form["error"] = True
+        else:
+            if (DataValidator.isemail(self.form['loginId'])):
+                inputError['loginId'] = "Login ID must be like student@gmail.com"
+                self.form['error'] = True
+
+        if (DataValidator.isNull(self.form["password"])):
+            inputError["password"] = "Password is required"
+            self.form["error"] = True
+
+        if (DataValidator.isNull(self.form["confirmPassword"])):
+            inputError["confirmPassword"] = "Confirm Password is required"
+            self.form["error"] = True
+
+        if (DataValidator.isNotNull(self.form['confirmPassword'])):
+            if (self.form['password'] != self.form['confirmPassword']):
+                inputError['confirmPassword'] = "Password & Confirm Password are not same"
+                self.form["error"] = True
+
         if (DataValidator.isNull(self.form["dob"])):
             inputError["dob"] = "DOB is required"
             self.form["error"] = True
@@ -63,6 +99,14 @@ class DoctorCtl(BaseCtl):
             if (DataValidator.isDate(self.form['dob'])):
                 inputError['dob'] = "Incorrect Date of birth"
                 self.form['error'] = True
+
+        if (DataValidator.isNull(self.form['gender'])):
+            inputError['gender'] = "Gender is required"
+            self.form['error'] = True
+
+        if (DataValidator.isNull(self.form["address"])):
+            inputError["address"] = "Address is required"
+            self.form["error"] = True
 
         if (DataValidator.isNull(self.form["mobileNumber"])):
             inputError["mobileNumber"] = "Mobile Number is required"
@@ -88,30 +132,28 @@ class DoctorCtl(BaseCtl):
         else:
             if (int(self.form['id']) > 0):
                 pk = int(self.form['id'])
-                duplicate = self.get_service().get_model().objects.exclude(id=pk).filter(
-                    firstName=self.form['firstName'])
+                duplicate = self.get_service().get_model().objects.exclude(id=pk).filter(loginId=self.form['loginId'])
                 if duplicate.count() > 0:
                     res["success"] = False
-                    res["result"]["message"] = "Name already exist"
+                    res["result"]["message"] = "Login Id already exist"
                 else:
-                    user = self.form_to_model(Doctor())
+                    user = self.form_to_model(User())
                     self.get_service().save(user)
                     res["success"] = True
                     res["result"]["data"] = user.id
-                    res["result"]["message"] = "Doctor updated successfully"
+                    res["result"]["message"] = "User updated successfully"
             else:
-                duplicate = self.get_service().get_model().objects.filter(firstName=self.form['firstName'])
+                duplicate = self.get_service().get_model().objects.filter(loginId=self.form['loginId'])
                 if duplicate.count() > 0:
                     res["success"] = False
-                    res["result"]["message"] = "Name already exist"
+                    res["result"]["message"] = "Login Id already exist"
                 else:
-                    user = self.form_to_model(Doctor())
+                    user = self.form_to_model(User())
                     self.get_service().save(user)
                     res["success"] = True
                     res["result"]["data"] = user.id
-                    res["result"]["message"] = "Doctor added successfully"
+                    res["result"]["message"] = "User added successfully"
         return JsonResponse(res)
-
 
     def search(self, request, params={}):
         print('--------------this is search')
@@ -119,19 +161,19 @@ class DoctorCtl(BaseCtl):
         res = {"result": {}, "success": True}
         if (json_request):
             params["firstName"] = json_request.get("firstName", None)
+            params["loginId"] = json_request.get("loginId", None)
             params["roleId"] = json_request.get("roleId", None)
             params["pageNo"] = json_request.get("pageNo", None)
-            print('--------------^^^', params["pageNo"])
+            print('--------------^^^',params["pageNo"])
         records = self.get_service().search(params)
         if records and records.get("data"):
             res["success"] = True
             res["result"]["data"] = records["data"]
-            res["result"]["lastId"] = Doctor.objects.last().id
+            res["result"]["lastId"] = User.objects.last().id
         else:
             res["success"] = False
             res["result"]["message"] = "No record found"
         return JsonResponse(res)
-
 
     def get(self, request, params={}):
         user = self.get_service().get(params["id"])
@@ -144,7 +186,6 @@ class DoctorCtl(BaseCtl):
             res["result"]["message"] = "No record found"
         return JsonResponse(res)
 
-
     def delete(self, request, params={}):
         user = self.get_service().get(params["id"])
         res = {"result": {}, "success": True}
@@ -153,14 +194,13 @@ class DoctorCtl(BaseCtl):
             records = self.get_service().search(params)
             if records and records.get("data"):
                 res["result"]["data"] = records["data"]
-                res["result"]["lastId"] = Doctor.objects.last().id
+                res["result"]["lastId"] = User.objects.last().id
             res["success"] = True
             res["result"]["message"] = "Data has been deleted successfully"
         else:
             res["success"] = False
             res["result"]["message"] = "Data was not deleted"
         return JsonResponse(res)
-
 
     def preload(self, request, params={}):
         res = {"result": {}, "success": True}
@@ -171,6 +211,5 @@ class DoctorCtl(BaseCtl):
         res["result"]["roleList"] = preloadList
         return JsonResponse(res)
 
-
     def get_service(self):
-        return DoctorService()
+        return UserService()

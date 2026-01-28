@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% include "Header.html" %}
+    <form method="POST">
+        {% csrf_token %}
+        <div align="center">
+            <h1>Add TimeTable</h1>
+
+            {% if form.error %}
+                <h3><font color="red"> {{ form.message }} </font></h3>
+            {% else %}
+                <h3><font color="green"> {{ form.message }} </font></h3>
+            {% endif %}
+            <table>
+                <input type="hidden" name="id" value="{{form.id}}">
+                <tr>
+                    <th>Exam Time:</th>
+                    <td>
+                         <select name="examTime">
+                            <option value="{{form.examTime}}">{{form.examTime}}</option>
+                            <option>9:00AM to 1:00PM</option>
+                            <option>2:00PM to 4:00PM</option>
+                            <option>4:00PM to 7:00PM</option>
+                        </select>
+                    </td>
+                    <td style="position: fixed; color: red;">{{ form.inputError.examTime }}</td>
+                </tr>
+                <tr>
+                    <th>Exam Date:</th>
+                    <td><input type="date" name="examDate" value="{{form.examDate}}" style="width: 98%;"></td>
+                    <td style="position: fixed; color: red;">{{ form.inputError.examDate }}</td>
+                </tr>
+                <tr>
+                    <th>Course:</th>
+                    <td>
+                        <select name="courseId" style="width:100%">
+                            <option value="{{form.courseId}}">{{ form.courseName }}</option>
+                            {% for course in courseList %}
+                                <option value="{{ course.id }}">{{ course.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td style="position: fixed; color: red;">{{ form.inputError.courseId }}</td>
+                </tr>
+                 <tr>
+                    <th>Subject:</th>
+                    <td>
+                        <select name="subjectId" style="width:100%">
+                            <option value="{{form.subjectId}}">{{ form.subjectName }}</option>
+                            {% for subject in subjectList %}
+                                <option value="{{ subject.id }}">{{ subject.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td style="position: fixed; color: red;">{{ form.inputError.subjectId }}</td>
+                </tr>
+                <tr>
+                    <th>Semester:</th>
+                    <td>
+                        <select name="semester" style="width:100%">
+                            <option value="{{form.semester}}">{{form.semester}}</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                        </select>
+                    </td>
+                    <td style="position: fixed; color: red;">{{ form.inputError.semester }}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td><input type="submit" value="save"></td>
+                </tr>
+            </table>
+        </div>
+    </form>
+</body>
+{%include "Footer.html"%}
+</html>

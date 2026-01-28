@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User List</title>
+</head>
+<body>
+    {% include "Header.html" %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div align="center">
+            <h1>Marksheet Merit List</h1>
+
+             {% if form.error %}
+                <h3><font color="red"> {{ form.message }} </font></h3>
+             {% else %}
+                <h3><font color="green"> {{ form.message }} </font></h3>
+             {% endif %}
+        </div>
+
+        <table border="1" width="100%">
+            <tr>
+                <th>S. No.</th>
+                <th>Roll Number</th>
+                <th>Name</th>
+                <th>Physics</th>
+                <th>Chemistry</th>
+                <th>Maths</th>
+                <th>Total</th>
+                <th>Percentage</th>
+            </tr>
+            {% for l in pageList %}
+            <tr>
+                <td align="center">{{ form.index|add:forloop.counter }}</td>
+                <td align="center">{{ l.rollNumber }}</td>
+                <td align="center">{{ l.name }}</td>
+                <td align="center">{{ l.physics }}</td>
+                <td align="center">{{ l.chemistry }}</td>
+                <td align="center">{{ l.maths }}</td>
+                <td align="center">{{ l.total }}</td>
+                <td align="center">{{ l.percentage|floatformat:2}} %</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </form>
+</body>
+{%include "Footer.html"%}
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% include "Header.html" %}
+    <form method="POST">
+        {% csrf_token %}
+        <div align="center">
+            <h1>Add Marksheet</h1>
+
+            {% if form.error %}
+                <h3><font color="red">{{ form.message }}</font></h3>
+            {% else %}
+                <h3><font color="green">{{ form.message }}</font></h3>
+            {% endif %}
+
+            <table>
+                <input type="hidden" name="id" value="{{ form.id }}">
+
+                <tr>
+                    <th>Roll No.:</th>
+                    <td><input type="text" name="rollNumber" value="{{ form.rollNumber }}"></td>
+                    <td style="position: fixed; color: red;">{{ form.inputError.rollNumber }}</td>
+                </tr>
+
+                <tr>
+                    <th>Name:</th>
+                    <td><input type="text" name="name" value="{{ form.name }}"></td>
+                    <td style="position: fixed; color: red;">{{ form.inputError.name }}</td>
+                </tr>
+
+                <tr>
+                    <th>Physics:</th>
+                    <td><input type="number" name="physics" value="{{ form.physics }}"></td>
+                    <td style="position: fixed; color: red;">{{ form.inputError.physics }}</td>
+                </tr>
+
+                <tr>
+                    <th>Chemistry:</th>
+                    <td><input type="number" name="chemistry" value="{{ form.chemistry }}"></td>
+                    <td style="position: fixed; color: red;">{{ form.inputError.chemistry }}</td>
+                </tr>
+
+                <tr>
+                    <th>Maths:</th>
+                    <td><input type="number" name="maths" value="{{ form.maths }}"></td>
+                    <td style="position: fixed; color: red;">{{ form.inputError.maths }}</td>
+                </tr>
+
+                <tr>
+                    <th></th>
+                    <td><input type="submit" value="save"></td>
+                </tr>
+            </table>
+        </div>
+    </form>
+</body>
+{%include "Footer.html"%}
+</html>

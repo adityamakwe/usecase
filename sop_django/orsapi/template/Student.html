@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% include "Header.html" %}
+    <form method="POST">
+        {% csrf_token %}
+        <div align="center">
+            <h1>Add Student</h1>
+
+            {% if form.error %}
+                <h3><font color="red"> {{ form.message }} </font></h3>
+            {% else %}
+                <h3><font color="green"> {{ form.message }} </font></h3>
+            {% endif %}
+            <table>
+                <input type="hidden" name="id" value="{{form.id}}">
+                <tr>
+                    <th>First Name:</th>
+                    <td><input type="text" name="firstName" value="{{form.firstName}}"></td>
+                    <td style="position: fixed; color: red;">{{ form.inputError.firstName }}</td>
+                </tr>
+                <tr>
+                    <th>Last Name:</th>
+                    <td><input type="text" name="lastName" value="{{form.lastName}}"></td>
+                    <td style="position: fixed; color: red;">{{ form.inputError.lastName }}</td>
+                </tr>
+                 <tr>
+                    <th>DOB:</th>
+                    <td><input type="date" name="dob" value="{{form.dob}}" style="width: 98%;"></td>
+                    <td style="position: fixed; color: red;">{{ form.inputError.dob }}</td>
+                </tr>
+                 <tr>
+                    <th>Mobile:</th>
+                    <td><input type="text" name="mobileNumber" value="{{form.mobileNumber}}"></td>
+                    <td style="position: fixed; color: red;">{{ form.inputError.mobileNumber }}</td>
+                </tr>
+                <tr>
+                    <th>Email:</th>
+                    <td><input type="text" name="email" value="{{form.email}}"></td>
+                    <td style="position: fixed; color: red;">{{ form.inputError.email }}</td>
+                </tr>
+                <tr>
+                    <th>College:</th>
+                    <td>
+                        <select name="collegeId" style="width:100%">
+                            <option value="{{form.collegeId}}">{{ form.collegeName }}</option>
+                            {% for college in collegeList %}
+                                <option value="{{ college.id }}">{{ college.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td style="position: fixed; color: red;">{{ form.inputError.collegeId }}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td><input type="submit" value="save"></td>
+                </tr>
+            </table>
+        </div>
+    </form>
+</body>
+{%include "Footer.html"%}
+</html>
