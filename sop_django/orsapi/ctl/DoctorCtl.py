@@ -73,7 +73,7 @@ class DoctorCtl(BaseCtl):
                 self.form['error'] = True
 
         if (DataValidator.isNull(self.form['roleId'])):
-            inputError['roleId'] = "Role Name is required"
+            inputError['roleId'] = "Expertise is required"
             self.form['error'] = True
 
         return self.form['error']
